@@ -21,7 +21,8 @@ The important packages and libraries required for reproducing this experiment ar
 - <b>Python = 3.7.9 </b> 
 - <b>[Pytorch](https://pytorch.org/get-started/previous-versions/) = 1.13.1+cu117 </b>
 - <b>pytorch-lightning = 1.9.5 </b>
-- <b> timm = 0.4.12 </b>
+- <b>timm = 0.4.12 </b>
+
 <h2>Environments Used </h2>
 
 A good place to build your environment is by installing the requirements from [here](https://github.com/CPJKU/dcase2024_task1_baseline).
@@ -92,8 +93,23 @@ python run_passt_training_h5.py
 
 Reuse the same parameters you used for your teacher model and make the following changes:
 
-- Set the default value of --ckpt_id to your model's id
-- Adjust the eval_dl depending on
+- Set the default value of --ckpt_id to your teacher model's id.
+- Adjust the eval_dl depending on whether you are reading from h5 or from wav files.
+- For wav files, use get_eval_set(). For h5 files, use ntu_get_eval_set().
+- eval_meta_csv path in dcase24_ntu_teacher.py should point at your meta.csv
+- Predicted logits csv should be saved under .../predictions.
+- Save the logits from the predictions csv file using the save_logits.py script. 
+
+Obtain the teacher logits by running this script using command line: 
+```
+python run_passt_training_h5.py --evaluate
+```
+
+<h2>Obtaining DCASE Results</h2>
+- Set the default value of --ckpt_id to your distilled student model's id.
+- Adjust the eval_dl depending on whether you are using h5 or reading from wav files.
+- For wav files, use get_eval_set(). For h5 files, use ntu_get_eval_set().
+- eval_meta_csv path in dcase24_ntu_student.py should point at the evaluation csv provided by the organizers.
 
 run the script using command line: 
 ```
