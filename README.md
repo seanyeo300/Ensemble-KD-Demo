@@ -21,7 +21,7 @@ The important packages and libraries required for reproducing this experiment ar
 - <b>Python = 3.7.9 </b> 
 - <b>[Pytorch](https://pytorch.org/get-started/previous-versions/) = 1.13.1+cu117 </b>
 - <b>pytorch-lightning = 1.9.5 </b>
-- <b> timm =0.4.12 </b>
+- <b> timm = 0.4.12 </b>
 <h2>Environments Used </h2>
 
 A good place to build your environment is by installing the requirements from [here](https://github.com/CPJKU/dcase2024_task1_baseline).
