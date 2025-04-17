@@ -12,7 +12,7 @@ import torch.nn as nn
 import os
 
 from helpers.lr_schedule import exp_warmup_linear_down
-from datasets.dcase24_ntu_student import ntu_get_training_set_dir, ntu_get_test_set, ntu_get_eval_set, open_h5, close_h5 # import get_training_set, get_test_set, get_eval_set
+from datasets.dcase24_ntu_student import ntu_get_training_set_dir, ntu_get_test_set, ntu_get_eval_set, open_h5, close_h5 # for raw wav get_training_set, get_test_set, get_eval_set
 from helpers.init import worker_init_fn
 from models.baseline import get_model
 from helpers.utils import mixstyle
@@ -473,10 +473,11 @@ def evaluate(config):
     os.makedirs(out_dir, exist_ok=True)
 
     
-    # Open h5 file once
-    #hf_in = open_h5('h5py_audio_wav')
-    eval_h5 = open_h5('eval_h5py')
+    # Open h5 file once       
+    hf_in = open_h5('h5py_audio_wav')
+    eval_h5 = open_h5('eval_h5py') # generate your own eval_h5 during the DCASE challenge.
     # load lightning module from checkpoint
+
     pl_module = PLModule.load_from_checkpoint(ckpt_file, config=config)
     trainer = pl.Trainer(logger=False,
                          accelerator='gpu',
@@ -489,8 +490,8 @@ def evaluate(config):
                          num_workers=config.num_workers,
                          batch_size=config.batch_size,
                          pin_memory=True)
-
-    # get model complexity from nessi
+    
+        # get model complexity from nessi
     sample = next(iter(test_dl))[0][0].unsqueeze(0).to(pl_module.device)
     shape = pl_module.mel_forward(sample).size()
     macs, params = nessi.get_torch_size(pl_module.model, input_size=shape)
@@ -512,14 +513,23 @@ def evaluate(config):
     info['test'] = res
 
     
-    # generate predictions on evaluation set
-    # You may want to use the original implementation of the eval_dl found in the dcase 2024 baseline code here for submission-
-    #-if you do not wish to save the eval files to h5
     
-    eval_dl = DataLoader(dataset=ntu_get_eval_set(eval_h5py),
-                         worker_init_fn=worker_init_fn,
-                         num_workers=config.num_workers,
+        
+    # eval_dl = DataLoader(dataset=ntu_get_eval_set(hf_in), # used to generate teacher logits if desired. 
+    #                      worker_init_fn=worker_init_fn,
+    #                      num_workers=config.num_workers,
+    #                      batch_size=config.batch_size)
+                         
+    eval_dl = DataLoader(dataset=ntu_get_eval_set(eval_h5), # Generate predictions on evaluation set. 
+                         worker_init_fn=worker_init_fn,     # Remember to adjust your csv path in dcase24_ntu_student.py
+                         num_workers=config.num_workers,    
                          batch_size=config.batch_size)
+
+    # # generate predictions on evaluation set              # Used for wav files
+    # eval_dl = DataLoader(dataset=get_eval_set(),          # Remember to adjust your csv path in dcase24_ntu_student.py
+    #                      worker_init_fn=worker_init_fn,
+    #                      num_workers=config.num_workers,
+    #                      batch_size=config.batch_size)
 
     predictions = trainer.predict(pl_module, dataloaders=eval_dl,ckpt_path=ckpt_file)
     # all filenames
@@ -547,8 +557,8 @@ def evaluate(config):
         json.dump(info, json_file)
 
     
-    #close_h5(hf_in)
-    close_h5(eval_h5py)
+    close_h5(hf_in)
+    close_h5(eval_h5)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='DCASE 24 argument parser')
