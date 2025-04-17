@@ -371,7 +371,7 @@ def evaluate(config):
     from sklearn import preprocessing
     import pandas as pd
     import torch.nn.functional as F
-    from datasets.dcase23_dev import dataset_config
+    from datasets.dcase24 import dataset_config
 
     assert config.ckpt_id is not None, "A value for argument 'ckpt_id' must be provided."
     ckpt_dir = os.path.join(config.project_name, config.ckpt_id, "checkpoints")
@@ -404,7 +404,7 @@ def evaluate(config):
                          devices=1,
                          precision=config.precision)
     ############# h5 edit here ##############
-    # evaluate lightning module on development-test split
+    # validate lightning module on development-test split
     test_dl = DataLoader(dataset=ntu_get_test_set(hf_in),
                          worker_init_fn=worker_init_fn,
                          num_workers=config.num_workers,
@@ -438,6 +438,12 @@ def evaluate(config):
                          worker_init_fn=worker_init_fn,
                          num_workers=config.num_workers,
                          batch_size=config.batch_size)
+    
+    # # generate predictions on evaluation set
+    # eval_dl = DataLoader(dataset=get_eval_set(),
+    #                      worker_init_fn=worker_init_fn,
+    #                      num_workers=config.num_workers,
+    #                      batch_size=config.batch_size)
     
     predictions = trainer.predict(pl_module, dataloaders=eval_dl, ckpt_path=ckpt_file) # predictions returns as files, y_hat
     # all filenames
@@ -508,7 +514,7 @@ if __name__ == '__main__':
     #  2. constant lr phase using value specified in 'lr' (for 'ramp_down_start' - 'warm_up_len' epochs)
     #  3. linearly decreasing to value 'las_lr_value' * 'lr' (for 'ramp_down_len' epochs)
     #  4. finetuning phase using a learning rate of 'last_lr_value' * 'lr' (for the rest of epochs up to 'n_epochs')
-    parser.add_argument('--lr', type=float, default=2e-5)
+    parser.add_argument('--lr', type=float, default=1e-5)
     parser.add_argument('--warm_up_len', type=int, default=3)
     parser.add_argument('--ramp_down_start', type=int, default=3)
     parser.add_argument('--ramp_down_len', type=int, default=10)
@@ -521,7 +527,7 @@ if __name__ == '__main__':
     parser.add_argument('--n_fft', type=int, default=1024)  # length (points) of fft
     parser.add_argument('--n_mels', type=int, default=128)  # number of mel bins
     parser.add_argument('--freqm', type=int, default=48)  # mask up to 'freqm' spectrogram bins
-    parser.add_argument('--timem', type=int, default=20)  # mask up to 'timem' spectrogram frames # can try 192
+    parser.add_argument('--timem', type=int, default=20)  # mask up to 'timem' spectrogram frames
     parser.add_argument('--fmin', type=int, default=0)  # mel bins are created for freqs. between 'fmin' and 'fmax'
     parser.add_argument('--fmax', type=int, default=None)
     parser.add_argument('--fmin_aug_range', type=int, default=1)  # data augmentation: vary 'fmin' and 'fmax'
