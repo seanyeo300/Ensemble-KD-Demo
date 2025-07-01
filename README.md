@@ -26,7 +26,7 @@ The important packages and libraries required for reproducing this experiment ar
 <h2>Environments Used </h2>
 
 A good place to build your environment is by installing the requirements from [here](https://github.com/CPJKU/dcase2024_task1_baseline).
-**Do not upgrade your lightning version**
+You may wish to upgrade your lightning version to >2.0 for faster run time
 
 - <b>Windows 10</b>
 
