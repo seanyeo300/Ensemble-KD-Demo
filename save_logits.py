@@ -4,8 +4,6 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score
 
-torch.set_printoptions(threshold=1000)
-torch.set_printoptions(edgeitems=5)
 # List of parent directories
 # DCASE ensemble (2 SIT 2 PaSST 2 BCBL, same augs)    
 parent_dirs = ["fskag87u","bxgn5l84","jiw5bohu", "erxj7yo6", "huyzahj3", "ttpwu2wq"]    # Change to your own directories
@@ -72,22 +70,3 @@ accuracy = accuracy_score(true_labels, predicted_labels)
 print("Filtered logits:")
 print(filtered_logits)
 print(f"Accuracy: {accuracy * 100:.3f}%")
-
-
-# predicted_labels = torch.argmax(loaded_logits, dim=1).numpy()
-
-# # Load and normalise test.csv
-# test_df = pd.read_csv(test_csv_path, delimiter='\t')
-# test_df['filename'] = test_df['filename'].str.strip().str[6:]  # Remove 'audio/' prefix
-# target_filenames = set(test_df['filename'].str.lower())
-# true_labels_str = df['scene_label'].values
-# label_encoder = LabelEncoder()
-# label_encoder.fit(true_labels_str)  # fit on ground truth
-# true_labels = label_encoder.transform(true_labels_str)
-# # Compute accuracy
-# accuracy = accuracy_score(true_labels, predicted_labels)
-
-# # Print the loaded averaged logits tensor
-# print("Loaded logits:")
-# print(loaded_logits)
-# print(f"Accuracy: {accuracy * 100:.3f}%")
