@@ -7,69 +7,8 @@ from sklearn.metrics import accuracy_score
 torch.set_printoptions(threshold=1000)
 torch.set_printoptions(edgeitems=5)
 # List of parent directories
-
-# PaSST homogeneous 12-model Same Augs
-# parent_dirs = ["jiw5bohu", "erxj7yo6","q5ct8wik","1l9r0xw7","z3448sj6","hoo6924h","vhfpq1xk","i1ynujgy","vj81jipc","wxlc41jz","u83l9gtx","ajod9lm3"] # List of Teacher IDs you wish to ensemble
-
-# SIT homogeneous 12-model Same Augs 
-# parent_dirs = ["fskag87u","a7ms5l1f","yyki5y1f","5acz12c2","jktyxl3l","bxgn5l84","0tdja3ol","sj8b3bru","r8g2qr0n","udoh66tw","9ozbd8ab","typoyy6z"] # List of Teacher IDs you wish to ensemble
-
-# SIT heterogeneous 12-model (Mix Augs)
-# parent_dirs = ["fskag87u","bxgn5l84","8gpctett","m68bl0sf","kgh56uev","do40x4vr","66i6el3q","fejho0n0","zs4tqkep","m0s194o3","glgmylji","7j2lr27l"] # List of Teacher IDs you wish to ensemble
-
-# PaSST heterogeneous 12-model (Mix Augs)
-# parent_dirs = ["jiw5bohu","erxj7yo6","spvyg1by","cywp59xz","24unoj7x","t4uhok6p","66i6el3q","fejho0n0","zs4tqkep","m0s194o3","glgmylji","7j2lr27l"] # List of Teacher IDs you wish to ensemble
-
-# PaSST heterogeneous 12-model Same Augs
-# 6 FMS+DIR (SFT) + 6 FMS+DIR (CP-ResNet)
-# parent_dirs = ["jiw5bohu","erxj7yo6","q5ct8wik","1l9r0xw7","z3448sj6","hoo6924h","66i6el3q","fejho0n0","cqtvflso","xuognkwc","0ltremt7","3k3am7qq"]
-# SIT heterogeneous 12-model (SIT) Same Augs
-# 6 FMS+DIR (SIT) + 6 FMS+DIR (CP-ResNet)
-# parent_dirs = ["fskag87u","a7ms5l1f","yyki5y1f","5acz12c2","jktyxl3l","bxgn5l84","66i6el3q","fejho0n0","cqtvflso","xuognkwc","0ltremt7","3k3am7qq"]
-
-# SIT heterogeneous 6-model (SIT) Mix Augs
-# parent_dirs = ["fskag87u","8gpctett","kgh56uev","66i6el3q","zs4tqkep","glgmylji"]
-
-# 6SIT 6BCBL mixed augs
-#  2 FMS+DIR, 2 FMS, 2 DIR (SIT) + 2 FMS+DIR (BCBL) + 2 FMS (BCBL) + 2 DIR (BCBL)
-# parent_dirs = ["fskag87u","bxgn5l84","8gpctett","m68bl0sf","kgh56uev","do40x4vr","huyzahj3","ttpwu2wq","9qlpxkfm","mtkxd1f9","c7urqd64","i9r5u5bz"]
-
-# 6SIT 6BCBL Same Augs
-#  6 FMS+DIR (SIT) + 6 FMS+DIR (BCBL)
-# parent_dirs =["fskag87u","a7ms5l1f","yyki5y1f","5acz12c2","jktyxl3l","bxgn5l84","huyzahj3","ttpwu2wq","iqahdgms", "5if10nhu","qkzlhzyb","55quevwg"]
-
-# 6PaSST 6BCBL mixed augs
-# parent_dirs = ["jiw5bohu","erxj7yo6","spvyg1by","cywp59xz","24unoj7x","t4uhok6p","huyzahj3","ttpwu2wq","9qlpxkfm","mtkxd1f9","c7urqd64","i9r5u5bz"]
-
-# 6PaSST 6BCBL Same augs
-# parent_dirs = ["jiw5bohu", "erxj7yo6","q5ct8wik","1l9r0xw7","z3448sj6","hoo6924h","huyzahj3","ttpwu2wq","iqahdgms", "5if10nhu","qkzlhzyb","55quevwg"]
-
-# DCASE ensemble (3 SIT 3 BCBL, various augs)
-# parent_dirs = ["fskag87u", "8gpctett", "kgh56uev", "huyzahj3", "9qlpxkfm", "c7urqd64"]   
-
-# DCASE ensemble (3 SIT 3 BCBL, same augs)    
-# parent_dirs = ["fskag87u","bxgn5l84","yyki5y1f","huyzahj3", "ttpwu2wq", "iqahdgms"]     
-    
-# DCASE ensemble (3 PaSST 3 BCBL, various aug)
-# parent_dirs = ["f5hhbj59","o661pbve","a27p3f3e","nmwun6cs", "1e5ld4y6", "gs5hm18o"]         
-
-# DCASE ensemble (3 PaSST 3 BCBL, same augs)
-# parent_dirs = ["jiw5bohu", "erxj7yo6", "q5ct8wik","huyzahj3", "ttpwu2wq", "iqahdgms"]
-  
 # DCASE ensemble (2 SIT 2 PaSST 2 BCBL, same augs)    
-parent_dirs = ["fskag87u","bxgn5l84","jiw5bohu", "erxj7yo6", "huyzahj3", "ttpwu2wq"]     
-  
-# 6 PaSST, FMS + DIR
-# parent_dirs = ["jiw5bohu","erxj7yo6","q5ct8wik","1l9r0xw7","hoo6924h","z3448sj6"]             
-
-# 6 SIT sub5 fms,dir
-# parent_dirs = ["fskag87u", "bxgn5l84", "yyki5y1f", "a7ms5l1f", "jktyxl3l", "5acz12c2"] 
-
-# 6 ResNet
-# parent_dirs = ["66i6el3q","fejho0n0","cqtvflso","xuognkwc","0ltremt7","3k3am7qq"]
-
-# 6 BCBL
-# parent_dirs = ["huyzahj3","ttpwu2wq","iqahdgms", "5if10nhu","qkzlhzyb","55quevwg"]
+parent_dirs = ["fskag87u","bxgn5l84","jiw5bohu", "erxj7yo6", "huyzahj3", "ttpwu2wq"]    # Change to your own directories
 
 base_path = r"D:\Sean\github\cpjku_dcase23_NTU\predictions" # Change path as needed
 test_csv_path = r"D:\Sean\github\cpjku_dcase23_NTU\split_setup\test.csv"
